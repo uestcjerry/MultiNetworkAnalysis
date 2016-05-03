@@ -35,7 +35,9 @@ private:
 	_TimeData_t second;
 };
 
+
 //==================================================================================//
+
 class BasicEdge {
 public:
 	friend bool operator<(const BasicEdge &, const BasicEdge &);					// 仅仅以from 和 to 来进行边的比较
@@ -69,9 +71,7 @@ private:
 };
 
 
-
 // =================================================================================//
-
 
 class BfsNode {
 public:
@@ -97,6 +97,5 @@ private:
 	BfsColor color;		
 	unsigned branch;
 };
-
 
 #endif

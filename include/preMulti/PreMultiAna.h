@@ -12,31 +12,56 @@
  *	需要存所有多层网络
  */
 
-class PreMultiAnalysis {
+/*
+ *	单层网络对象
+ */
+class PreMultiLayer {
 public:
-	PreMultiAnalysis();
-	~PreMultiAnalysis();
-
-	unsigned getMultiNetNum();
-
-	bool buildMultiNetwork(const std::string &, const std::vector<std::string> &);		//fileprefix multinetworks
-	bool clearMultiNetwork();
-
+	PreMultiLayer();
+	~PreMultiLayer();
 public:
+	bool initLayerObj(const std::string &);
+	void clearLayerObj();
+	void showLayerObj();
 
+	void setLayerId(const unsigned);
+	unsigned getLayerId() const;
 
 private:
-	PreMultiAnalysis &operator=(const PreMultiAnalysis &) = delete;
-	PreMultiAnalysis(const PreMultiAnalysis &) = delete;
+	//PreMultiLayer(const PreMultiLayer &) = delete;
+	//PreMultiLayer & operator=(const PreMultiLayer &) = delete;	
 
 private:
-	//多层网络数据
-	std::vector<CrossLink> multiNetObj;
-	unsigned multiNetNum;
+	CrossLink layerObj;						//自带capacity 属性表示最大角标（节点编号）范围 1~capacity
+	unsigned layerId;						//根据文件大小排序作为编号 0 ~ 21
 };
 
+/*
+ *	多层网络
+ */
+class PreMultiLayerManage {
+public:
+	typedef std::vector<PreMultiLayer> PreMultiLayerManage_t;
+
+	PreMultiLayerManage();
+	~PreMultiLayerManage();
+public:
+	void setMultiNum(const unsigned);
+	const unsigned getMultiNum() const;
+
+	bool initMultiLayerObj(const std::string &, const std::vector<std::string> &);
+	void clearMultiLayerObj();
+	void showMultiLayerObj();
+
+
+private:
+	PreMultiLayerManage(const PreMultiLayerManage &) = delete;
+	PreMultiLayerManage &operator=(const PreMultiLayerManage &) = delete;
+private:
+	PreMultiLayerManage_t multiLayerObj;
+	unsigned multiLayerNum;
+};
 
 bool preMultiAnalysisRevokeThis();			//after all, revoke this function
-
 
 #endif

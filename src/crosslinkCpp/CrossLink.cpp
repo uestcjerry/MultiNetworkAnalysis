@@ -278,7 +278,7 @@ bool CrossLink::getAjaSizeFromVert(const _NodeTag_t u, unsigned &res)
 	res = multiIte.size();
 	return true;
 }
-bool CrossLink::getDegreeAsUndi(const _NodeTag_t u, unsigned &res)
+unsigned CrossLink::getDegreeAsUndi(const _NodeTag_t u, unsigned &res)
 {
 	if (u > capacity || u <= 0) return false;
 	return crossLinkObj.at(u).first.size() + crossLinkObj.at(u).second.size();
@@ -349,8 +349,8 @@ void CrossLink::showCroLink()
 		}
 		std::cout << std::endl;
 	}
-	std::cout << "press any key.." << std::endl;
-	getchar();
+	//std::cout << "Press any key.." << std::endl;
+	//getchar();
 	std::cout << "============================= Rev Aja table =============================" << std::endl;
 	for (unsigned j = 1; j <= capacity; ++j) {
 		auto tempPair = crossLinkObj.at(j);
@@ -366,5 +366,6 @@ void CrossLink::showCroLink()
 		}
 		std::cout << std::endl;
 	}
-	std::cout << "finish.." << std::endl;
+	std::cout << "Press any key to continue.." << std::endl;
+	getchar();
 }
