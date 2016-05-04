@@ -4,7 +4,6 @@
 #include <fstream>
 
 
-
 CrossLink::CrossLink() { capacity = 0; }
 CrossLink::~CrossLink() { capacity = 0; }
 
@@ -343,7 +342,7 @@ void CrossLink::showCroLink()
 		std::cout << "start node = " << i << " : ";
 		long long line = 0;
 		for (const auto &elem : tempPair.first) {
-			if (++line % 4 == 0)
+			if (++line % 6 == 0)
 				std::cout << std::endl;
 			std::cout << elem << ", ";
 		}
@@ -360,7 +359,7 @@ void CrossLink::showCroLink()
 		std::cout << "start node = " << j << " : ";
 		long long line = 0;
 		for (const auto &elem : tempPair.second) {
-			if (++line % 4 == 0)
+			if (++line % 6 == 0)
 				std::cout << std::endl;
 			std::cout << elem << ", ";
 		}

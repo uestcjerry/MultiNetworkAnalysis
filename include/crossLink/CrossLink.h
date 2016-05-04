@@ -42,6 +42,7 @@ public:
 	
 	bool getAjaSizeFromHori(const _NodeTag_t, unsigned &);							// get out-degree of node u 出度
 	bool getAjaSizeFromVert(const _NodeTag_t, unsigned &);							// get in-degree of node u	入度
+	
 	unsigned getDegreeAsUndi(const _NodeTag_t, unsigned &);								//当无向图， 取度（出度+入度）
 
 	bool getAjaOfTimeFromHori(const _NodeTag_t, std::vector<Time> &);

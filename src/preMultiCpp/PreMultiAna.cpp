@@ -1,5 +1,8 @@
 #include "../../include/preMulti/PreMultiAna.h"
 #include <iostream>
+#include <cmath>
+#include <ctgmath>
+#include <utility>
 
 /* ================================ PreMultiLayer ==================================== */
 PreMultiLayer::PreMultiLayer() { layerId = 0; }
@@ -11,6 +14,9 @@ bool PreMultiLayer::initLayerObj(const std::string &file)
 		std::cerr << "cons crosslink obj error." << std::endl;
 		return false;
 	}
+	unsigned userNum = layerObj.getCapacity();
+	nodeActiVec = PreMultiLayer::nodeActiVec_t(userNum + 1);
+
 	return true;
 }
 void PreMultiLayer::clearLayerObj()
@@ -26,8 +32,51 @@ void PreMultiLayer::setLayerId(const unsigned u) { layerId = u; }
 
 unsigned PreMultiLayer::getLayerId() const { return layerId; }
 
+unsigned PreMultiLayer::getLayerCapacity() const { return layerObj.getCapacity(); }
+
+/*
+ *	node activity vector init
+ */
+bool PreMultiLayer::initNodeActiVec()
+{
+	unsigned userNum = layerObj.getCapacity();
+	if (userNum == 0)
+		return false; 
+
+	// node activity vector数组的长度根据这一层的最大节点号为准
+	nodeActiVec = PreMultiLayer::nodeActiVec_t(userNum + 1);	
+
+	// 更新node activity数组，即向量 bi
+	for (unsigned i = 1; i <= userNum; ++i) {
+		unsigned ajaHoriSize = 0, ajaVertSize = 0;
+		if (layerObj.getAjaSizeFromHori(i, ajaHoriSize) == false) {
+			std::cerr << "get aja size from hori error." << std::endl;
+			return false;
+		}
+		if (ajaHoriSize > 0) {
+			nodeActiVec.at(i) = 1;
+			continue;
+		}
+		if (layerObj.getAjaSizeFromVert(i, ajaVertSize) == false) {
+			std::cerr << "get aja size from vert error." << std::endl;
+			return false;
+		}
+		if (ajaVertSize > 0)
+			nodeActiVec.at(i) = 1;
+		//nodeActiVec.at(i) = (ajaHoriSize + ajaVertSize > 0) ? 1 : 0;
+	}
+	return true;
+}
+bool PreMultiLayer::getNodeActiVecAt(const unsigned i, unsigned &u)
+{
+	if (i > layerObj.getCapacity() || i == 0)
+		return false;
+	u = nodeActiVec.at(i);
+	return true;
+}
 
 /* ================================= PreMultiLayerManage ============================= */
+
 PreMultiLayerManage::PreMultiLayerManage() { multiLayerNum = 0; }
 
 PreMultiLayerManage::~PreMultiLayerManage() {}
@@ -47,6 +96,7 @@ bool PreMultiLayerManage::initMultiLayerObj(const std::string &filePre, const st
 			std::cerr << "init layer obj at : " << i << " error." << std::endl;
 			return false;
 		}
+		multiLayerObj.at(i).setLayerId(i);
 		multiLayerObj.at(i).showLayerObj();
 	}
 	return true;
@@ -64,26 +114,95 @@ void PreMultiLayerManage::showMultiLayerObj()
 	}
 }
 
+/* ===================================================================================================== */
+
+/*
+ *	计算 node activity Bi（节点活跃度） 的分布， exp指数
+ *	output: <i Bi>
+ */
+bool PreMultiLayerManage::initNodeActiBeforeBi()
+{
+	if (multiLayerNum == 0)
+		return false;
+	for (unsigned i = 0; i < multiLayerNum; ++i)
+		multiLayerObj.at(i).initNodeActiVec();
+	return true;
+}
+bool PreMultiLayerManage::calNodeActiDisOfBi(const std::string &outputFilePref)
+{
+	if (initNodeActiBeforeBi() == false) { 
+		std::cerr << "init node activity before Bi error." << std::endl;
+		return false;
+	}
+
+	unsigned maxNodeId = 0;
+	if (findMaxNodeIdFromMultiNet(maxNodeId) == false)
+		return false;
+
+	std::vector<std::pair<unsigned, unsigned>> resultVec;				// format <nodeId, Bi>
+
+	//对于每个节点，计算它的 Bi
+	for (unsigned i = 1; i <= maxNodeId; ++i) {
+		unsigned Bi = 0;
+
+		for (unsigned j = 0; j < multiLayerNum; ++j) {
+			// i 如果超过当前层网络的capacity，跳过这层
+			if (i > multiLayerObj.at(j).getLayerCapacity())
+				continue;
+			unsigned tempI = 0;
+			if (multiLayerObj.at(j).getNodeActiVecAt(i, tempI) == false) {
+				std::cerr << "get node acti vec at :" << i << " error." << std::endl;
+				return false;
+			}
+			Bi += tempI;
+		}
+		resultVec.push_back(std::make_pair(i, Bi));
+	}
+	
+	if (writeFileOfNodeActi(outputFilePref, resultVec) == false) {
+		std::cerr << "write file of node activity error." << std::endl;
+		return false;
+	}
+
+	return true;
+}
+bool PreMultiLayerManage::findMaxNodeIdFromMultiNet(unsigned &max)
+{
+	if (multiLayerNum == 0)
+		return false;
+
+	max = 0;
+	for (unsigned i = 0; i < multiLayerNum; ++i) {
+		unsigned maxNodeTemp = multiLayerObj.at(i).getLayerCapacity();
+		max = maxNodeTemp > max ? maxNodeTemp : max;
+	}
+	return true;
+}
+bool PreMultiLayerManage::writeFileOfNodeActi(const std::string &outputPref, 
+						const std::vector<std::pair<unsigned, unsigned>> &resultVec)
+{
+	// to do ..
+
+	return true;
+}
+
+
+
 
 
 /*	=================  pre multi analysis revoke function ================= */
 bool preMultiAnalysisRevokeThis()
 {
 	PreMultiLayerManage preMultiObj;
-	
-	std::string filePrefix = "E:\\data_of_weibo\\multi_test\\";
-	std::vector<std::string> multiFiles = { 
-		"Foxconn worker falls to death",
-		"individual income tax threshold rise up to 3500",
-		"incident of self-burning at Yancheng, Jangsu",
-		"Chongqing gang trials",
-		"Windows Phone release"
-	};
 
-	if (preMultiObj.initMultiLayerObj(filePrefix, multiFiles) == false)
+	//init multiLayerNum && multiLayerObj
+	if (preMultiObj.initMultiLayerObj(BasicData::TargetAnaResPrefix, BasicData::VecSrcEventFiles) == false)
 		return false;
 
-	preMultiObj.showMultiLayerObj();
+	//preMultiObj.showMultiLayerObj();
+
+	if (preMultiObj.calNodeActiDisOfBi(BasicData::TargetAnaResPrefix) == false)
+		return false;
 
 
 	// analysis..
