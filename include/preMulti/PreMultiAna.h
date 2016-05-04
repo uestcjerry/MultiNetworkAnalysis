@@ -69,6 +69,7 @@ public:
 	bool findMaxNodeIdFromMultiNet(unsigned &);
 	bool writeFileOfNodeActi(const std::string &, const std::vector<std::pair<unsigned, unsigned>> &);
 
+	bool handleTheResultFromNodeActi(const std::string &, const std::string &, const double);		//分析 node activity Bi 结果文件，取对数画图
 
 private:
 	PreMultiLayerManage(const PreMultiLayerManage &) = delete;

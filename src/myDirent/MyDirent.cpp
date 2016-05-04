@@ -72,46 +72,6 @@ int closedir(DIR *d)
 	free(d);
 	return 0;
 }
-
-/*
-int main()
-{
-	// use as readdir() in Linux
-	DIR *dir;
-	struct dirent *ptr;
-
-	char *flow[65536];
-	int num = 0, i = 0;
-
-	if ((dir = opendir("E:\\data_of_weibo\\data_washed\\event_max_time")) == NULL) {
-		std::cerr << "open dir error." << std::endl;
-		return false;
-	}
-
-	while ((ptr = readdir(dir)) != NULL) {
-		flow[num] = (char *)malloc(sizeof(char));
-		strcpy(flow[num], ptr->d_name);             //char d_name[1];
-		num++;
-	}
-
-	// output test
-	for (i = 0; i < num; ++i) {
-		if (strcmp(flow[i], "..") == 0 || strcmp(flow[i], ".") == 0)
-			std::cout << "find last directory." << std::endl;
-		else
-			std::cout << std::string(flow[i]) << std::endl;
-	}
-	std::cout << "total file: " << num - 1 << std::endl;
-
-	closedir(dir);
-
-	std::cout << "Press any key to continue.." << std::endl;
-	getchar();
-
-	return 0;
-}
-*/
-
 /*
 int main()
 {

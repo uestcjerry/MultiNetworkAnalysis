@@ -18,7 +18,8 @@ namespace BasicData {
 
 	const std::string SrcUserRehashedDelRepPrefix = "e:\\data_of_weibo\\data_washed\\user_occurred_rehashed_del_rep\\";
 
-	const std::string SrcEventWithTimePrefix = "e:\\data_of_weibo\\data_washed\\event_max_time\\";
+	const std::string SrcEventWithTimePrefix = "e:\\data_of_weibo\\data_washed\\event_max_time\\";		// for analysis
+
 	const std::string SrcEventFilePrefix = "e:\\data_of_weibo\\data_washed\\event_max\\";
 
 	const std::vector<std::string> VecSrcEventFiles = {

@@ -14,8 +14,11 @@ int main()
 
 
 	// pre multilayer analysis
-	if (preMultiAnalysisRevokeThis() == false)
+	if (preMultiAnalysisRevokeThis() == false) {
+		getchar();
 		return false;
+	}
+		
 
 	return 0;
 }
