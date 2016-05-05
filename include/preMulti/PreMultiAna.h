@@ -63,13 +63,19 @@ public:
 public:
 	//分析过程写这里 一次指标分析调用相应地总方法即可
 
-	// 节点活跃度 node activity Bi
+	//	节点活跃度 node activity Bi
+	//	NodeActivity.cpp
 	bool calNodeActiDisOfBi(const std::string &);			//revoke this
 	bool initNodeActiBeforeBi();							//先计算所有层的 bi ，再计算所有点的 Bi
 	bool findMaxNodeIdFromMultiNet(unsigned &);
 	bool writeFileOfNodeActi(const std::string &, const std::vector<std::pair<unsigned, unsigned>> &);
 
 	bool handleTheResultFromNodeActi(const std::string &, const std::string &, const double);		//分析 node activity Bi 结果文件，取对数画图
+
+
+	// 分析节点活跃度向量 bi 的分布 
+	// Rank(bi) && Rank(bi | Bi) (已知Bi的情况下) 
+
 
 private:
 	PreMultiLayerManage(const PreMultiLayerManage &) = delete;
