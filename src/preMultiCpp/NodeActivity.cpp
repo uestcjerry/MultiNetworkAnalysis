@@ -14,6 +14,7 @@ bool PreMultiLayerManage::calNodeActiDisOfBi(const std::string &outputFilePref)
 {
 	std::cout << "init node acti before bi begin.." << std::endl;
 
+	// 在使用多层网络之前，需要计算每一层的节点活跃度，调用init()
 	if (initNodeActiBeforeBi() == false) {
 		std::cerr << "init node activity before Bi error." << std::endl;
 		return false;
@@ -26,14 +27,13 @@ bool PreMultiLayerManage::calNodeActiDisOfBi(const std::string &outputFilePref)
 	if (findMaxNodeIdFromMultiNet(maxNodeId) == false)
 		return false;
 
-	std::cout << "maxnodeid = " << maxNodeId << std::endl;		//
+	std::cout << "maxnodeid = " << maxNodeId << std::endl;	
 	//getchar();
 
-	std::vector<std::pair<unsigned, unsigned>> resultVec;				// format <nodeId, Bi>
+	std::vector<std::pair<unsigned, unsigned>> resultVec;	// 计算每个点的活跃度 format <nodeId, Bi>
 
 	//对于每个节点，计算它的 Bi
 	for (unsigned i = 1; i <= maxNodeId; ++i) {
-
 		if (i % 10000 == 0)
 			std::cout << "i = " << i << std::endl;//////////
 
@@ -52,15 +52,10 @@ bool PreMultiLayerManage::calNodeActiDisOfBi(const std::string &outputFilePref)
 		resultVec.push_back(std::make_pair(i, Bi));
 	}
 
-	//std::cout << "write file begin.." << std::endl; //////
-
 	if (writeFileOfNodeActi(outputFilePref, resultVec) == false) {
 		std::cerr << "write file of node activity error." << std::endl;
 		return false;
 	}
-
-	//std::cout << "write file finish" << std::endl;	//
-	//getchar();
 
 	return true;
 }
@@ -69,7 +64,7 @@ bool PreMultiLayerManage::initNodeActiBeforeBi()
 	if (multiLayerNum == 0)
 		return false;
 	for (unsigned i = 0; i < multiLayerNum; ++i) {
-		std::cout << "init node acti vec at i = " << i << std::endl;
+		std::cout << "init node acti vec at multi level = " << i << std::endl;
 		multiLayerObj.at(i).initNodeActiVec();
 	}
 

@@ -1,4 +1,5 @@
 #include "../../include/preMulti/PreMultiAna.h"
+#include "../../include/dirent/MyDirent.h"
 #include <iostream>
 
 /* ================================ PreMultiLayer ==================================== */
@@ -88,19 +89,17 @@ bool PreMultiLayerManage::initMultiLayerObj(const std::string &filePre, const st
 	multiLayerObj = PreMultiLayerManage::PreMultiLayerManage_t(multiLayerNum);
 
 	for (unsigned i = 0; i < multiLayerNum; ++i) {
-		//std::cout << "init multi layer obj at : " << i << std::endl;
-
 		if (i == multiLayerNum - 1) {
 			std::cout << "i = " << i << std::endl;
 			//getchar();
 		}
 		
+		// 对于每层网络而言，调用它的init()
 		if (multiLayerObj.at(i).initLayerObj(filePre + allFiles.at(i)) == false) {
 			std::cerr << "init layer obj at : " << i << " error." << std::endl;
 			return false;
 		}
 		multiLayerObj.at(i).setLayerId(i);
-		//multiLayerObj.at(i).showLayerObj();
 	}
 	return true;
 }
@@ -117,34 +116,60 @@ void PreMultiLayerManage::showMultiLayerObj()
 	}
 }
 
+/*
+ *	读取文件夹里面的文件 过滤 . && ..
+ */
+bool PreMultiLayerManage::getSrcFile(const std::string &srcFilePref, std::vector<std::string> &srcVec)
+{
+	srcVec.clear();
+	
+	DIR *dir;
+	struct dirent *ptr;
+
+	if ((dir = opendir(srcFilePref.c_str())) == NULL) {
+		std::cerr << "open dir error. at :" << srcFilePref << std::endl;
+		return false;
+	}
+
+	while ((ptr = readdir(dir)) != NULL) {
+		std::string nowFileName(ptr->d_name);
+		if (nowFileName == "." || nowFileName == "..")
+			continue;
+		srcVec.push_back(nowFileName);
+	}
+
+	closedir(dir);
+
+	return true;
+}
 
 
 /*	=================  pre multi analysis revoke function ================= */
 bool preMultiAnalysisRevokeThis()
 {
-	
 	PreMultiLayerManage preMultiObj;
 
-	/*
-	//part one: 计算所有点的节点活跃度 <nodeid, Bi> ，存文件 nodeActi
-	//init multiLayerNum && multiLayerObj 
+	// preparation: init multilayer network
+	// init multiLayerNum && multiLayerObj 
 	if (preMultiObj.initMultiLayerObj(BasicData::SrcEventWithTimePrefix, BasicData::VecSrcEventFiles) == false)
 		return false;
+	std::cout << "init multilayer obj finish.." << std::endl;
+	  
+	// preMultiObj.showMultiLayerObj();
 
-	//preMultiObj.showMultiLayerObj();
-
+	
+	//part one: 计算所有点的节点活跃度 <nodeid, Bi> ，存文件 nodeActi
+	/*
 	if (preMultiObj.calNodeActiDisOfBi(BasicData::TargetAnaResPrefix) == false) {
 		getchar();
 		std::cerr << "cal node acti dis of Bi error." << std::endl;
 		return false;
 	}
-
-	// clearMulti()
-	preMultiObj.clearMultiLayerObj();
 	*/
 
+	
+	// part two: analysis the result
 	/*
-	//part two: analysis the result
 	std::string srcFile = "e:\\data_of_weibo\\data_washed\\analysis_result\\nodeActi";		//src file: <nodeId, Bi>
 	std::string tarPref = "e:\\data_of_weibo\\data_washed\\analysis_result\\";				//tar file: <Bi, log(Bi)>
 
@@ -159,5 +184,23 @@ bool preMultiAnalysisRevokeThis()
 		}
 	}
 	*/
+
+	// part three: calculate rank(bi) && rank(bi|Bi)
+	/*
+	if (preMultiObj.calNodeVecDisOfbiAndbiBi(BasicData::TargetAnaResPrefix) == false) {
+		getchar();
+		return false;
+	}
+	*/
+
+	// part four: calculate Layer activity N_alpha && Q_alpha_beta && H_alpha_beta
+	// continue..
+
+
+
+
+	// 最后，清理多层网络数据 clearMulti()
+	preMultiObj.clearMultiLayerObj();
+
 	return true;
 }

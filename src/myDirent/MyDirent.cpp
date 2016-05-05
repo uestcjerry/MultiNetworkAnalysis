@@ -81,7 +81,7 @@ int main()
 
 	std::vector<std::string> resVec;
 
-	int num = 0, i = 0;
+	//int num = 0, i = 0;
 
 	if ((dir = opendir("E:\\data_of_weibo\\data_washed\\event_max_time")) == NULL) {
 		std::cerr << "open dir error." << std::endl;
