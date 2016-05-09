@@ -9,15 +9,18 @@
 int main()
 {
 	// event analysis
-	//if (eventAnalysisRevokeThis() == false)
-	//	return false;
-
+	
+	if (eventAnalysisRevokeThis() == false)
+		return false;
+	
 
 	// pre multilayer analysis
+	/*
 	if (preMultiAnalysisRevokeThis() == false) {
 		getchar();
 		return false;
 	}
+	*/
 		
 
 	return 0;

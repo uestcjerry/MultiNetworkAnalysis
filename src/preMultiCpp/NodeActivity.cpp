@@ -34,14 +34,15 @@ bool PreMultiLayerManage::calNodeActiDisOfBi(const std::string &outputFilePref)
 
 	//对于每个节点，计算它的 Bi
 	for (unsigned i = 1; i <= maxNodeId; ++i) {
-		if (i % 10000 == 0)
+		if (i % 100000 == 0)
 			std::cout << "i = " << i << std::endl;//////////
 
 		unsigned Bi = 0;
 		for (unsigned j = 0; j < multiLayerNum; ++j) {
-			// i 如果超过当前层网络的capacity，跳过这层
+			// 注意判断: i 如果超过当前层网络的capacity，跳过这层
 			if (i > multiLayerObj.at(j).getLayerCapacity())
 				continue;
+
 			unsigned tempI = 0;
 			if (multiLayerObj.at(j).getNodeActiVecAt(i, tempI) == false) {
 				std::cerr << "get node acti vec at :" << i << " error." << std::endl;

@@ -1,22 +1,53 @@
 #include "../../include/basicDef/BasicData.h"
 #include "../../include/eventAnalysis/EventAnalysis.h"
+#include "../../include/dirent/MyDirent.h"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 /* 
- *	k- core decomposition 
+ *	k- core decomposition revoke function
  */
 bool EventAnalysis::kCoreDecomposition() 
 {
 	std::cout << "k core decomposition begin.." << std::endl;
 
-	std::string srcFilePrefix = BasicData::SrcEventWithTimePrefix;
+	//	kcore 分解，分别针对 转发网络 && 用户 进行分解排序，分别调用不同的src即可
 
+	//	step one: 这里是对转发事件的kcore分解
+	std::string srcFilePrefix = BasicData::SrcEventWithTimePrefix;	
+
+	//	step two: 这里是把用户关系做成事件转发格式 做用户的kcore分解，需要预处理用户关系文件生成带时间戳的“转发网络格式”文件，所有的用户得去重到一个网络
+	//std::string srcFilePrefix = "E:\\data_of_weibo\\data_washed\\user_occurred_rehashed_like_network\\";
+
+
+	//	step one: BasicData::VecSrcEventFiles.size() 这个是转发网络的事件列表
+
+	//	step two: std::vector<std::string> userFileVec; 用readdir()读取下用户文件名
+	/*
+	std::vector<std::string> userFileVec;
+	DIR *dir;
+	struct dirent *ptr;
+	if ((dir = opendir(srcFilePrefix.c_str())) == NULL) {
+		std::cerr << "open dir error. at :" << srcFilePrefix << std::endl;
+		return false;
+	}
+	while ((ptr = readdir(dir)) != NULL) {
+		std::string nowFileName(ptr->d_name);
+		if (nowFileName == "." || nowFileName == "..")
+			continue;
+		userFileVec.push_back(nowFileName);
+	}
+	closedir(dir);
+	*/
+
+	// to do here..
+	//	按照不同的step目的，这里的vector用不同的
+	//	step one:	BasicData::VecSrcEventFiles
+	//	step two:	userFileVec
 	for (unsigned i = 0; i < BasicData::VecSrcEventFiles.size(); ++i) {
-
-		std::cout << "\n handling : " << BasicData::VecSrcEventFiles.at(i) << std::endl;	/////////////
+		//std::cout << "\n handling : " << BasicData::VecSrcEventFiles.at(i) << std::endl;	/////////////
 
 		if (buildNetworkOne(srcFilePrefix + BasicData::VecSrcEventFiles.at(i)) == false) {
 			std::cerr << "build network one error." << std::endl, getchar();

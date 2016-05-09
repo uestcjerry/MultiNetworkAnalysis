@@ -69,6 +69,7 @@ bool eventAnalysisRevokeThis()
 	//if (obj.initUserManageObj(BasicData::SrcUserRehashedDelRepPrefix) == false)
 	//	return false;
 
+	/*
 	if (obj.anaDegreeRelaBetLevl() == false)
 		return false;
 
@@ -80,6 +81,7 @@ bool eventAnalysisRevokeThis()
 
 	if (obj.anaTransProportion() == false)
 		return false;
+	*/
 
 	if (obj.kCoreDecomposition() == false)
 		return false;

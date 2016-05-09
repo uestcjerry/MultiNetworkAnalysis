@@ -61,6 +61,8 @@ bool PreMultiLayer::initNodeActiVec()
 		}
 		if (ajaVertSize > 0)
 			nodeActiVec.at(i) = 1;
+		else
+			nodeActiVec.at(i) = 0;
 		//nodeActiVec.at(i) = (ajaHoriSize + ajaVertSize > 0) ? 1 : 0;
 	}
 	return true;
