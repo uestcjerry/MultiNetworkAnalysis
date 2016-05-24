@@ -45,6 +45,12 @@ bool EventAnalysis::buildNetworkOne(const std::string &file)
 		return false;
 	return true;
 }
+bool EventAnalysis::buildNetworkOneWithTime(const std::string &file, const Time &minTime, const long long disOfDay)
+{
+	if (networkOne.readFileConsCrosLinkBeforTime(file, minTime, disOfDay) == false)
+		return false;
+	return true;
+}
 bool EventAnalysis::buildNetworkTwo(const std::string &file)
 {
 	if (networkTwo.readFileConsCrosLink(file) == false)
@@ -83,8 +89,12 @@ bool eventAnalysisRevokeThis()
 		return false;
 	*/
 
-	if (obj.kCoreDecomposition() == false)
+	//if (obj.kCoreDecomposition() == false)
+	//	return false;
+
+	if (obj.kcoreAnaBetTime() == false)
 		return false;
+
 
 	std::cout << "event analysis finish.." << std::endl;
 	std::cout << "press any key to continue.." << std::endl;

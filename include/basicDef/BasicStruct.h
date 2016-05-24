@@ -16,7 +16,7 @@ public:
 	friend bool operator==(const Time &, const Time &);
 	friend std::ostream& operator<<(std::ostream &, const Time &);
 
-	friend long long distanceDayBetTime(const Time &, const Time &);		//左边时间小，右边时间大
+	friend long long distanceDayBetTime(const Time &, const Time &);		//计算时间的差值(天)
 
 	Time();
 	Time(const _TimeData_t, const _TimeData_t, const _TimeData_t, const _TimeData_t, const _TimeData_t, const _TimeData_t);

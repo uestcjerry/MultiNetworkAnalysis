@@ -82,6 +82,9 @@ bool CrossLink::consCrossLinkObj(const std::string &file)
 	std::cout << "\n" << "cons crosslink obj finish: " << file << std::endl;
 	return true;
 }
+/*
+ *	构造网络
+ */
 bool CrossLink::readFileConsCrosLink(const std::string &file)
 {
 	std::cout << "\n read file cons cross-link: " << file << std::endl;			////
@@ -95,12 +98,13 @@ bool CrossLink::readFileConsCrosLink(const std::string &file)
 		return false;
 	}
 	
+	// 带时间戳的数据格式
 	unsigned idOne, idTwo, year, month, day, hour, minute, second;
 	long long line = 0;
 
 	while (inputFile >> idOne >> idTwo >> year >> month >> day >> hour >> minute >> second) {
-		if (++line % 10000 == 0)
-			std::cout << "read line = " << line << std::endl;
+		if (++line % 100000 == 0)
+			std::cout << "read file cons line = " << line << std::endl;
 		
 		Time tempTimeObj = Time(year, month, day, hour, minute, second);
 		BasicEdge tempEdgeObj = BasicEdge(idOne, idTwo, 1, tempTimeObj);
@@ -116,9 +120,68 @@ bool CrossLink::readFileConsCrosLink(const std::string &file)
 		}
 	}
 	inputFile.close();
-	std::cout << "\n read file cons cross-link finish.." << std::endl;			////
+	//std::cout << "\n read file cons cross-link finish.." << std::endl;			////
 	return true;
 }
+/*
+ *	根据时间构造网络
+ *  minTime: 转发网络的最小时间
+ *	lengthOfDay: 时间段长度，按照时间段划分，取max - min的总区间，按照分段来确定 lengthOfDay 的长度
+ *	只构造小于等于 lengthOfDay 时间的边
+ */
+bool CrossLink::readFileConsCrosLinkBeforTime(const std::string &file, const Time &minTime, const long long lengthOfDay)
+{
+	//std::cout << "read file cons crossLink before time begin.." << std::endl;
+	
+	if (consCrossLinkObj(file) == false) {
+		std::cerr << "cons crossLink obj error." << std::endl;
+		return false;
+	}
+
+	std::fstream inputFile(file, std::ios_base::in);
+	if (!inputFile.is_open()) {
+		std::cerr << "open input file error: " << file << std::endl;
+		return false;
+	}
+
+	// 带时间戳的数据格式
+	unsigned idOne, idTwo, year, month, day, hour, minute, second;
+	long long insertTime = 0;
+
+	while (inputFile >> idOne >> idTwo >> year >> month >> day >> hour >> minute >> second) {
+		//if (++line % 100000 == 0)
+		//	std::cout << "read file cons line = " << line << std::endl;
+
+		Time tempTimeObj = Time(year, month, day, hour, minute, second);
+
+		//过滤下符合标准的时间
+		long long distanceDay = distanceDayBetTime(tempTimeObj, minTime);
+		if (distanceDay > lengthOfDay)
+			continue;
+		insertTime++;
+
+		//这里都是当做无权网络处理
+		BasicEdge tempEdgeObj = BasicEdge(idOne, idTwo, 1, tempTimeObj);
+		BasicEdge tempEdgeRevObj = BasicEdge(idTwo, idOne, 1, tempTimeObj);
+
+		if (false == insertHoriCroLink(tempEdgeObj)) {
+			std::cerr << "insert error." << std::endl;
+			return false;
+		}
+		if (false == insertVertCroLink(tempEdgeObj)) {
+			std::cerr << "insert error." << std::endl;
+			return false;
+		}
+	}
+	inputFile.close();
+	
+	std::cout << "insert time = " << insertTime << ", lengthOfDay = " << lengthOfDay << std::endl;
+	//std::cout << "press any key to continue.." << std::endl;
+	//getchar();
+
+	return true;
+}
+
 bool CrossLink::findMaxNodeTag(const std::string &file, unsigned &max)
 {
 	max = 0;

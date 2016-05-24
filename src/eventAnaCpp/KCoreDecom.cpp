@@ -42,7 +42,7 @@ bool EventAnalysis::kCoreDecomposition()
 	closedir(dir);
 	*/
 
-	// to do here..
+	//	to do here..
 	//	按照不同的step目的，这里的vector用不同的
 	//	step one:	BasicData::VecSrcEventFiles
 	//	step two:	userFileVec
@@ -67,7 +67,6 @@ bool EventAnalysis::kCoreDecomposition()
 			std::cerr << "k-core decomposition write file error." << std::endl;
 			return false;
 		}
-
 		clearNetworkOne();
 	}
 

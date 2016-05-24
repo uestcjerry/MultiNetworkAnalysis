@@ -24,6 +24,7 @@ public:
 	bool consCrossLinkObj(const std::string &);					//renew capacity , after decons , call this
 
 	bool readFileConsCrosLink(const std::string &);				//revoke this to initialize CrossLink obj. argument is total path of input file.
+	bool readFileConsCrosLinkBeforTime(const std::string &, const Time &, const long long);		//min time, day
 
 	bool findMaxNodeTag(const std::string &, unsigned &);
 	bool findMaxNodeTagTime(const std::string &, unsigned &);

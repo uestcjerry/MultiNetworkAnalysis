@@ -14,7 +14,6 @@ bool operator<(const Time &l, const Time &r)
 		return l.day < r.day;
 	else
 		return false;
-
 	/*
 	else if (l.hour != r.hour)
 		return l.hour < r.hour;
@@ -24,7 +23,7 @@ bool operator<(const Time &l, const Time &r)
 		return l.second < r.second;
 	else
 		return false;
-		*/
+	*/
 }
 bool operator>(const Time &l, const Time &r)
 {
@@ -50,6 +49,9 @@ std::ostream& operator<<(std::ostream &os, const Time &u)
 	os << u.year << " " << u.month << " " << u.day << " " << u.hour << " " << u.minute << " " << u.second;
 	return os;
 }
+/*
+ *	计算时间之间的差值（天）
+ */
 long long distanceDayBetTime(const Time &l, const Time &r)
 {
 	if (l > r)
@@ -66,7 +68,7 @@ long long distanceDayBetTime(const Time &l, const Time &r)
 	oy = l.year - om / 10;
 	od = 365 * oy + oy / 4 - oy / 100 + oy / 400 + (om * 306 + 5) / 10 + (l.day - 1);
 
-	return od - nd;
+	return nd - od;
 }
 
 
