@@ -36,7 +36,7 @@ public:
 	bool calCommonNumber(std::vector<unsigned> &, std::set<unsigned> &, long long &);
 	bool calUnionNumber(CrossLink &, std::set<unsigned> &, long long &);
 
-	// connected component
+	// connected component  连通分量
 	bool anaConnectedComponent();
 
 	bool procBfsArray(std::unique_ptr<BfsNode[]> &);
@@ -45,13 +45,15 @@ public:
 
 	// transmit proportion	随时间的转发率
 	bool anaTransProportion();
+
 	bool getMinMaxTimeOfEvent(CrossLink &, Time &, Time &);
 	bool countingBucketAccordTime(CrossLink &, std::unique_ptr<long long[]> &, Time &, Time &);
 	int countingBucketArray(std::unique_ptr<long long[]> &, const Time &, const Time &, const Time &, const long long);
 	bool calTransPropResult(std::unique_ptr<long long[]> &, std::vector<std::pair<double, double>> &);
 
-	// k-core decomposition k-壳分解
+	// k-core decomposition k-壳中心性
 	bool kCoreDecomposition();
+	bool kCoreUserDecomposition();
 
 	bool decompEventFile(CrossLink &, std::vector<std::pair<unsigned, unsigned>> &, const unsigned);
 	unsigned findMinDegreeNow(const CrossLink &, const std::vector<std::pair<bool, unsigned>> &);
@@ -63,6 +65,22 @@ public:
 
 	bool findMinAndMaxTimeOfEvent(const std::string &, Time &, Time &);
 	bool kcoreAnaWriteFile(const std::string &, const std::vector<std::pair<unsigned, unsigned>> &, const unsigned, const double);
+
+	// 度中心性排序
+	bool degreeCentrality();
+	
+	bool calculateEachNodeDegree(std::vector<unsigned> &);
+	bool calculateEventNodeNumber(const std::vector<unsigned> &, unsigned &);			//获取时间用户个数
+	bool writeFileDegreeCentra(const std::string &, const unsigned, const std::vector<unsigned> &, const unsigned);
+
+	// 接近中心性
+	bool closenessCentrality();
+
+	bool calEachEventNodeNum(unsigned &);
+	bool calEachEventClossCentra(const unsigned, std::vector<std::pair<unsigned, double>> &);
+	bool calNodeSumDis(const unsigned, unsigned &);
+	bool writeFileClosCentra(const std::string &, const unsigned, const std::vector<std::pair<unsigned, double>> &);
+
 
 private:
 	EventAnalysis(const EventAnalysis &) = delete;

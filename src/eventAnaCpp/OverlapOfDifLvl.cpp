@@ -158,6 +158,7 @@ bool EventAnalysis::calUnionNumber(CrossLink &network, std::set<unsigned> &commo
 			return false;
 		if (ajaSize == 0)
 			continue;
+
 		std::vector<unsigned> ajaOfNode;
 		if (network.getAjaOfNodeFromHoriCroLink(i, ajaOfNode) == false)
 			return false;

@@ -280,7 +280,8 @@ bool CrossLink::getAjaOfNodeFromHoriCroLink(const _NodeTag_t i, std::vector<_Nod
 	if (multiIte.size() == 0)
 		return true;
 	for (auto iter = multiIte.begin(); iter != multiIte.end(); iter++)
-		vec.push_back(iter->getTo());
+		if (iter->getTo() != i)
+			vec.push_back(iter->getTo());
 	return true;
 }
 bool CrossLink::getAjaOfNodeFromVertCroLink(const _NodeTag_t j, std::vector<_NodeTag_t> &vec)
@@ -292,7 +293,8 @@ bool CrossLink::getAjaOfNodeFromVertCroLink(const _NodeTag_t j, std::vector<_Nod
 	if (multiIte.size() == 0)
 		return true;
 	for (auto iter = multiIte.begin(); iter != multiIte.end(); iter++)
-		vec.push_back(iter->getFrom());
+		if (iter->getFrom() != j)
+			vec.push_back(iter->getFrom());
 	return true;
 }
 
@@ -306,7 +308,8 @@ bool CrossLink::getAjaFromHoriCroLink(const BasicEdge &u, std::vector<_NodeTag_t
 	if (multiIte.size() == 0)
 		return true;
 	for (auto iter = multiIte.begin(); iter != multiIte.end(); iter++)
-		vec.push_back(iter->getTo());
+		if (iter->getTo() != tempX)
+			vec.push_back(iter->getTo());
 	return true;
 }
 bool CrossLink::getAjaFromVertCroLink(const BasicEdge &u, std::vector<_NodeTag_t> &vec)
@@ -319,31 +322,68 @@ bool CrossLink::getAjaFromVertCroLink(const BasicEdge &u, std::vector<_NodeTag_t
 	if (multiIte.size() == 0)
 		return true;
 	for (auto iter = multiIte.begin(); iter != multiIte.end(); iter++)
-		vec.push_back(iter->getFrom());
+		if (iter->getFrom() != tempY)
+			vec.push_back(iter->getFrom());
 	return true;
 }
 bool CrossLink::getAjaSizeFromHori(const _NodeTag_t u, unsigned &res)
 {
 	if (u > capacity || u <= 0)
 		return false;
-	auto multiIte = crossLinkObj.at(u).first;
 	
-	res = multiIte.size();
+	std::vector<unsigned> ajaVec;
+	if (this->getAjaOfNodeFromHoriCroLink(u, ajaVec) == false) {
+		std::cerr << "get aja of node from hori error: " << u << std::endl;
+		return false;
+	}
+
+	res = ajaVec.size(); 
 	return true;
 }
 bool CrossLink::getAjaSizeFromVert(const _NodeTag_t u, unsigned &res)
 {
 	if (u > capacity || u <= 0)
 		return false;
-	auto multiIte = crossLinkObj.at(u).second;
+	std::vector<unsigned> ajaReVec;
+	if (this->getAjaOfNodeFromVertCroLink(u, ajaReVec) == false) {
+		std::cerr << "get aja of node from hori error: " << u << std::endl;
+		return false;
+	}
 
-	res = multiIte.size();
+	res = ajaReVec.size();
 	return true;
 }
-unsigned CrossLink::getDegreeAsUndi(const _NodeTag_t u, unsigned &res)
+/*
+ *	处理类似 310 310 这样的转发
+ */
+bool CrossLink::getDegreeAsUndi(const _NodeTag_t u, unsigned &res)
 {
-	if (u > capacity || u <= 0) return false;
-	return crossLinkObj.at(u).first.size() + crossLinkObj.at(u).second.size();
+	if (u > capacity || u <= 0) 
+		return false;
+
+	std::vector<unsigned> ajaVec;
+	if (this->getAjaOfNodeFromHoriCroLink(u, ajaVec) == false) {
+		std::cerr << "get aja of node from hori error: " << u << std::endl;
+		return false;
+	}
+
+	std::vector<unsigned> ajaReVec;
+	if (this->getAjaOfNodeFromVertCroLink(u, ajaReVec) == false) {
+		std::cerr << "get aja of node from vert error: " << u << std::endl;
+		return false;
+	}
+
+	unsigned degreeTotal = 0;
+	for (const auto &elem : ajaVec)
+		if (elem != u)
+			degreeTotal++;
+	for (const auto &elem : ajaReVec)
+		if (elem != u)
+			degreeTotal++;
+
+	//res = crossLinkObj.at(u).first.size() + crossLinkObj.at(u).second.size();
+	res = degreeTotal;
+	return true;
 }
 
 bool CrossLink::getAjaOfTimeFromHori(const _NodeTag_t i, std::vector<Time> &vec)

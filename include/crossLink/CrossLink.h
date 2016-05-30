@@ -33,10 +33,10 @@ public:
 	bool insertVertCroLink(const BasicEdge &);
 
 	bool searchHoriCroLink(const BasicEdge &);
-	//bool searchVertCroLink(const BasicEdge &);				//逻辑？
+	//bool searchVertCroLink(const BasicEdge &);									//逻辑？
 
-	bool getAjaOfNodeFromHoriCroLink(const _NodeTag_t, std::vector<_NodeTag_t> &);			//邻接表
-	bool getAjaOfNodeFromVertCroLink(const _NodeTag_t, std::vector<_NodeTag_t> &);			//逆邻接表
+	bool getAjaOfNodeFromHoriCroLink(const _NodeTag_t, std::vector<_NodeTag_t> &);	//邻接表
+	bool getAjaOfNodeFromVertCroLink(const _NodeTag_t, std::vector<_NodeTag_t> &);	//逆邻接表
 
 	bool getAjaFromHoriCroLink(const BasicEdge &, std::vector<_NodeTag_t> &);
 	bool getAjaFromVertCroLink(const BasicEdge &, std::vector<_NodeTag_t> &);
@@ -44,7 +44,7 @@ public:
 	bool getAjaSizeFromHori(const _NodeTag_t, unsigned &);							// get out-degree of node u 出度
 	bool getAjaSizeFromVert(const _NodeTag_t, unsigned &);							// get in-degree of node u	入度
 	
-	unsigned getDegreeAsUndi(const _NodeTag_t, unsigned &);								//当无向图， 取度（出度+入度）
+	bool getDegreeAsUndi(const _NodeTag_t, unsigned &);							//当无向图， 取度（出度+入度） 修正
 
 	bool getAjaOfTimeFromHori(const _NodeTag_t, std::vector<Time> &);
 	bool getAjaOfTimeFromVert(const _NodeTag_t, std::vector<Time> &);

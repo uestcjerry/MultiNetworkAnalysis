@@ -98,4 +98,39 @@ private:
 	unsigned branch;
 };
 
+
+// =================================================================================== //
+/*
+ *	计算节点对之间的最短路径
+ */
+/*
+class EdgePairDis {
+public:
+	friend bool operator==(const EdgePairDis &, const EdgePairDis &);				//from 和 to 分别比较
+	friend bool operator<(const EdgePairDis &, const EdgePairDis &);
+
+public:
+	EdgePairDis();
+	EdgePairDis(const unsigned, const unsigned, const unsigned dis = 0);
+	EdgePairDis(const EdgePairDis &);
+	EdgePairDis &operator=(const EdgePairDis &);
+	~EdgePairDis();
+
+	void setFrom(const unsigned);
+	const unsigned getFrom() const;
+
+	void setTo(const unsigned);
+	const unsigned getTo() const;
+
+	void setDis(const unsigned);
+	const unsigned getDis() const;
+
+private:
+	_NodeTag_t from;
+	_NodeTag_t to;
+
+	_NodeTag_t distance;
+};
+*/
+
 #endif

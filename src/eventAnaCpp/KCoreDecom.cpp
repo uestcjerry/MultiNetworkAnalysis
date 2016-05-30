@@ -8,6 +8,7 @@
 
 /* 
  *	k- core decomposition revoke function
+ *	转发事件的kcore分解
  */
 bool EventAnalysis::kCoreDecomposition() 
 {
@@ -18,36 +19,13 @@ bool EventAnalysis::kCoreDecomposition()
 	//	step one: 这里是对转发事件的kcore分解
 	std::string srcFilePrefix = BasicData::SrcEventWithTimePrefix;	
 
-	//	step two: 这里是把用户关系做成事件转发格式 做用户的kcore分解，需要预处理用户关系文件生成带时间戳的“转发网络格式”文件，所有的用户得去重到一个网络
-	//std::string srcFilePrefix = "E:\\data_of_weibo\\data_washed\\user_occurred_rehashed_like_network\\";
-
-
 	//	step one: BasicData::VecSrcEventFiles.size() 这个是转发网络的事件列表
-
-	//	step two: std::vector<std::string> userFileVec; 用readdir()读取下用户文件名
-	/*
-	std::vector<std::string> userFileVec;
-	DIR *dir;
-	struct dirent *ptr;
-	if ((dir = opendir(srcFilePrefix.c_str())) == NULL) {
-		std::cerr << "open dir error. at :" << srcFilePrefix << std::endl;
-		return false;
-	}
-	while ((ptr = readdir(dir)) != NULL) {
-		std::string nowFileName(ptr->d_name);
-		if (nowFileName == "." || nowFileName == "..")
-			continue;
-		userFileVec.push_back(nowFileName);
-	}
-	closedir(dir);
-	*/
 
 	//	to do here..
 	//	按照不同的step目的，这里的vector用不同的
 	//	step one:	BasicData::VecSrcEventFiles
-	//	step two:	userFileVec
 	for (unsigned i = 0; i < BasicData::VecSrcEventFiles.size(); ++i) {
-		//std::cout << "\n handling : " << BasicData::VecSrcEventFiles.at(i) << std::endl;	/////////////
+		std::cout << "\n handling : " << BasicData::VecSrcEventFiles.at(i) << std::endl;	/////////////
 
 		if (buildNetworkOne(srcFilePrefix + BasicData::VecSrcEventFiles.at(i)) == false) {
 			std::cerr << "build network one error." << std::endl, getchar();
@@ -90,6 +68,27 @@ bool EventAnalysis::decompEventFile(CrossLink &network, std::vector<std::pair<un
 	unsigned remainNodeNum = 0;
 
 	for (unsigned i = 1; i <= len; ++i) {
+		std::vector<unsigned> ajaVec;
+		if (networkOne.getAjaOfNodeFromHoriCroLink(i, ajaVec) == false) {
+			std::cerr << "get aja of node from hori error: " << i << std::endl;
+			return false;
+		}
+
+		std::vector<unsigned> ajaReVec;
+		if (networkOne.getAjaOfNodeFromVertCroLink(i, ajaReVec) == false) {
+			std::cerr << "get aja of node from vert error: " << i << std::endl;
+			return false;
+		}
+
+		unsigned horiAndVert = 0;
+		for (const auto &elem : ajaVec)
+			if (elem != i)
+				horiAndVert++;
+		for (const auto &elem : ajaReVec)
+			if (elem != i)
+				horiAndVert++;
+
+		/*
 		unsigned horiSize = 0, vertSize = 0;
 		if (network.getAjaSizeFromHori(i, horiSize) == false) {
 			std::cerr << "get aja size from hori error." << std::endl;
@@ -104,7 +103,15 @@ bool EventAnalysis::decompEventFile(CrossLink &network, std::vector<std::pair<un
 		}
 		else
 			remainEdgeVec.at(i).first = false;
-		remainEdgeVec.at(i).second = horiSize + vertSize;
+		*/
+
+		if (horiAndVert != 0) {
+			remainEdgeVec.at(i).first = true; remainNodeNum++;
+		}
+		else
+			remainEdgeVec.at(i).first = false;
+
+		remainEdgeVec.at(i).second = horiAndVert;
 	}
 
 	/*
@@ -249,5 +256,47 @@ bool EventAnalysis::kCoreDecomWriteFile(const std::string &tarFilePre, const uns
 		outpufFile << elem.first << "\t" << elem.second << "\n";
 
 	outpufFile.close();
+	return true;
+}
+
+/*
+ *	用户关系网络kcore分解
+ */
+bool EventAnalysis::kCoreUserDecomposition()
+{
+	std::cout << "k core decomposition begin.." << std::endl;
+
+	//	kcore 分解，分别针对 转发网络 && 用户 进行分解排序，分别调用不同的src即可
+
+	//	step two: 这里是把用户关系做成事件转发格式 做用户的kcore分解，需要预处理用户关系文件生成带时间戳的“转发网络格式”文件，所有的用户得去重到一个网络
+	const std::string srcFilePrefix = BasicData::SrcEventWithTimePrefix;
+
+	const std::string fileName = "user_k_core_src_network";
+
+	//	按照不同的step目的
+	//	step two:	userFileVec
+	if (buildNetworkOne(srcFilePrefix + fileName) == false) {
+		std::cerr << "build network one error." << std::endl, getchar();
+		clearNetworkOne();
+		return false;
+	}
+
+	//todo decomposition
+	std::vector<std::pair<unsigned, unsigned>> res;
+	if (decompEventFile(networkOne, res, 0) == false) {
+		std::cerr << "de-composite event file error : " << srcFilePrefix + fileName << std::endl;
+		return false;
+	}
+
+	//写入文件之中
+	if (kCoreDecomWriteFile(BasicData::TargetAnaResPrefix, 0, res) == false) {
+		std::cerr << "k-core decomposition write file error." << std::endl;
+		return false;
+	}
+	clearNetworkOne();
+
+	std::cout << "k core decomposition finish.." << std::endl;
+	std::cout << "Press any key to continue.." << std::endl;
+	getchar();
 	return true;
 }

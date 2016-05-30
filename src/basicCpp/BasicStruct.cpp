@@ -186,3 +186,50 @@ void BfsNode::setBranch(const unsigned b) { branch = b; }
 unsigned BfsNode::getBranch() const { return branch; }
 
 
+// ============================================== EdgePairDis =================================== //
+/*
+bool operator==(const EdgePairDis &l, const EdgePairDis &r)
+{
+	if (l.from == r.from && l.to == r.to) 
+		return true;
+	else 
+		return false;
+}
+bool operator<(const EdgePairDis &l, const EdgePairDis &r)
+{
+	if (l.from != r.from)
+		return l.from < r.from;
+	else if (l.to != r.to)
+		return l.to < r.to;
+	else
+		return false;
+}
+
+EdgePairDis::EdgePairDis() : from(0), to(0), distance(0)
+{}
+EdgePairDis::EdgePairDis(const unsigned a, const unsigned b, const unsigned dis = 0) : from(a), to(b), distance(dis)
+{}
+EdgePairDis::EdgePairDis(const EdgePairDis &u) : from(u.from), to(u.to), distance(u.distance)
+{}
+EdgePairDis& EdgePairDis::operator=(const EdgePairDis &u)
+{
+	if (this == &u)
+		return *this;
+	from = u.from, to = u.to, distance = u.distance;
+
+	return *this;
+}
+EdgePairDis::~EdgePairDis() {}
+
+void EdgePairDis::setFrom(const unsigned u) { from = u; }
+
+const unsigned EdgePairDis::getFrom() const { return from; }
+
+void EdgePairDis::setTo(const unsigned u) { to = u; }
+
+const unsigned EdgePairDis::getTo() const { return to; }
+
+void EdgePairDis::setDis(const unsigned u) { distance = u; }
+
+const unsigned EdgePairDis::getDis() const { return distance; }
+*/
