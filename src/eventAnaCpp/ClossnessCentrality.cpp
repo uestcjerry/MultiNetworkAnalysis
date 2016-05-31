@@ -12,9 +12,9 @@ bool EventAnalysis::closenessCentrality()
 	const std::string tarFilePref = BasicData::TargetAnaResPrefix;
 
 	//const std::vector<std::string> testVec = { "testOne.txt" };
-
-	for (unsigned i = 0; i < BasicData::VecSrcEventFiles.size(); ++i) {
 	//for (unsigned i = 0; i < testVec.size(); ++i) {
+
+	for (unsigned i = 1; i < BasicData::VecSrcEventFiles.size(); ++i) {
 		std::cout << "handling file: " << BasicData::VecSrcEventFiles.at(i) << std::endl;		/////////////
 
 		if (buildNetworkOne(srcFilePref + BasicData::VecSrcEventFiles.at(i)) == false) {
@@ -23,6 +23,7 @@ bool EventAnalysis::closenessCentrality()
 		}
 		
 		//data we need
+		std::cout << "calculate each event node number begin.." << std::endl;
 		unsigned eachEventNodeNum = 0;
 		if (calEachEventNodeNum(eachEventNodeNum) == false) {
 			std::cerr << "cal each event node number error." << std::endl;
@@ -41,7 +42,6 @@ bool EventAnalysis::closenessCentrality()
 			std::cerr << "write file closs centra error." << std::endl;
 			return false;
 		}
-
 		clearNetworkOne();
 	}
 
@@ -70,7 +70,7 @@ bool EventAnalysis::calEachEventClossCentra(const unsigned eachEventNodeNum, std
 	//std::cout << "max node num = " << maxNodeNum << std::endl;///////////////
 
 	for (unsigned i = 1; i <= maxNodeNum; ++i) {
-		if (i % 100000 == 0)
+		if (i % 10000 == 0)
 			std::cout << "each node closs centra i = " << i << std::endl;		// test.
 
 		unsigned nodeDegree = 0;
@@ -173,17 +173,8 @@ bool EventAnalysis::calNodeSumDis(const unsigned startNode, unsigned &sumDis)
 
 	sumDis = sumPath;
 
-	/////////////////////////////
-	
-
-	///////////////////////////////////////////
-	/*
-	std::cout << "start node : " << startNode << std::endl;
-	for (unsigned i = 1; i <= maxNodeNum; ++i)
-		if (pathVec.at(i) != 0)
-			std::cout << "i = " << i << "\t" << " length = " << pathVec.at(i) << std::endl;
-	getchar();
-	*/
+	free(visitVec);
+	free(pathVec);
 
 	return true;
 }
