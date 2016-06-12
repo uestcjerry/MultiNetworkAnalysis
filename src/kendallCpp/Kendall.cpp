@@ -58,7 +58,7 @@ bool KendallAnalysis::judgeTwoSrcFile(const std::string &srcFileOne, const std::
 		std::cerr << "open file error at: " << srcFile2 << std::endl;
 		return false;
 	}
-	unsigned temp;
+	//unsigned temp;
 	while (inputFile2 >> temp)
 		fileTwoNode++;
 	inputFile2.close();
@@ -82,23 +82,26 @@ bool KendallAnalysis::judgeTwoSrcFile(const std::string &srcFileOne, const std::
  *	(x_i > x_j && y_i > y_j) || (x_i < x_j && y_i < y_j)
  */
 bool KendallAnalysis::kendallExpressionOne(const std::string &srcFileOne, const std::string &srcFileTwo
-						, const std::string &tarFileName)
+	, const std::string &tarFileName)
 {
+	if (judgeTwoSrcFile(srcFileOne, srcFileTwo) == false) {
+		std::cerr << "src file do not meet the requirment.." << std::endl;
+		return false;
+	}
+
+	//////////////////////////
+
 	const std::string srcFile1 = srcFilePref + srcFileOne;
 	const std::string srcFile2 = srcFilePref + srcFileTwo;
 
 	const std::string tarFile = tarFilePref + tarFileName;
 
-	if (judgeTwoSrcFile(srcFile1, srcFile2) == false) {
-		std::cerr << "src file do not meet the requirment.." << std::endl;
-		return false;
-	}
-
 	//////////////////////////////////////////////////////////////
 
-	unsigned totalNodeNum = 0;
-	unsigned commonPairNum = 0, unCommonPariNum = 0;
+	long long totalNodeNum = 0;
+	long long commonPairNum = 0, unCommonPariNum = 0;
 
+	// src vector..
 	std::vector<unsigned> fileOneVec;
 	std::vector<unsigned> fileTwoVec;
 
@@ -132,7 +135,20 @@ bool KendallAnalysis::kendallExpressionOne(const std::string &srcFileOne, const 
 				unCommonPariNum++;
 		}
 
-	double kendallRes = 2 * static_cast<double>(commonPairNum - unCommonPariNum) / static_cast<double>(totalNodeNum * (totalNodeNum - 1));
+	double firstPart = static_cast<double>(commonPairNum - unCommonPariNum);
+	double secondPart = static_cast<double>(totalNodeNum * (totalNodeNum - 1));
+
+	double kendallRes = (2 * firstPart) / secondPart;
+
+	/*
+	std::cout << "commmon pair = " << commonPairNum << std::endl;
+	std::cout << "un common pair = " << unCommonPariNum << std::endl;
+	std::cout << "totalNode = " << totalNodeNum << ", secondpart = " << secondPart << std::endl;
+	std::cout << "kendall = " << kendallRes << std::endl;
+	getchar();
+	*/
+
+	//double kendallRes = 2 * (static_cast<double>(commonPairNum - unCommonPariNum) / static_cast<double>(totalNodeNum * (totalNodeNum - 1)));
 
 	//////////////////////////////////////////////////////////////
 	std::fstream outputFile(tarFile, std::ios_base::out);
@@ -141,14 +157,14 @@ bool KendallAnalysis::kendallExpressionOne(const std::string &srcFileOne, const 
 		return false;
 	}
 
-	outputFile << "% src file: " << srcFileOne << "\n";
-	outputFile << "% src file: " << srcFileTwo << "\n";
+	//outputFile << "% src file: " << srcFileOne << "\n";
+	//outputFile << "% src file: " << srcFileTwo << "\n";
 	outputFile << kendallRes << "\n";
 
 	outputFile.close();
 
 	return true;
-}	
+}
 
 /*
  *	kendall ¹«Ê½¶þ
@@ -162,20 +178,21 @@ bool KendallAnalysis::kendallExpressionOne(const std::string &srcFileOne, const 
 bool KendallAnalysis::kendallExpressionTwo(const std::string &srcFileOne, const std::string &srcFileTwo
 					, const std::string &tarFileName)
 {
+	if (judgeTwoSrcFile(srcFileOne, srcFileTwo) == false) {
+		std::cerr << "src file do not meet the requirment.." << std::endl;
+		return false;
+	}
+	/////////////////////////////////////////////////////
+
 	const std::string srcFile1 = srcFilePref + srcFileOne;
 	const std::string srcFile2 = srcFilePref + srcFileTwo;
 
 	const std::string tarFile = tarFilePref + tarFileName;
 
-	if (judgeTwoSrcFile(srcFile1, srcFile2) == false) {
-		std::cerr << "src file do not meet the requirment.." << std::endl;
-		return false;
-	}
-
-	////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
 
 	unsigned totalNodeNum = 0;
-	unsigned commonPairNum = 0, unCommonPariNum = 0;				// C and D
+	long long commonPairNum = 0, unCommonPariNum = 0;				// C and D
 
 	std::vector<unsigned> fileOneVec;
 	std::vector<unsigned> fileTwoVec;
@@ -209,7 +226,6 @@ bool KendallAnalysis::kendallExpressionTwo(const std::string &srcFileOne, const 
 			else
 				unCommonPariNum++;
 		}
-
 
 	//////////////////////////////////////////////////
 
@@ -249,8 +265,14 @@ bool KendallAnalysis::kendallExpressionTwo(const std::string &srcFileOne, const 
 	}
 	
 	//	T = (C - D) / (sqrt(N3 - N1) * sqrt(N3 - N2))
-	double kendall = static_cast<double>(commonPairNum - unCommonPariNum) / 
-		(sqrt(static_cast<double>(N3 - N1)) * sqrt(static_cast<double>(N3 - N2)));
+	double firstPart = static_cast<double>(commonPairNum - unCommonPariNum);
+	double secondPart = sqrt(static_cast<double>(N3 - N1));
+	double thirdPart = sqrt(static_cast<double>(N3 - N2));
+	
+	double kendallRes = firstPart / (secondPart * thirdPart);
+
+	//double kendall = static_cast<double>(commonPairNum - unCommonPariNum) / 
+	//	(sqrt(static_cast<double>(N3 - N1)) * sqrt(static_cast<double>(N3 - N2)));
 
 	std::fstream outputFile(tarFile, std::ios_base::out);
 	if (!outputFile.is_open()) {
@@ -258,9 +280,9 @@ bool KendallAnalysis::kendallExpressionTwo(const std::string &srcFileOne, const 
 		return false;
 	}
 
-	outputFile << "% src file: " << srcFileOne << "\n";
-	outputFile << "% src file: " << srcFileTwo << "\n";
-	outputFile << kendall << "\n";
+	//outputFile << "% src file: " << srcFileOne << "\n";
+	//outputFile << "% src file: " << srcFileTwo << "\n";
+	outputFile << kendallRes << "\n";
 
 	outputFile.close();
 

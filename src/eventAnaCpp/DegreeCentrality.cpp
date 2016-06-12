@@ -23,8 +23,10 @@ bool EventAnalysis::degreeCentrality()
 		}
 
 		// data we need
-		std::vector<unsigned> degreeVec = std::vector<unsigned>(BasicData::MaxCrossLinkLength + 1);
-		unsigned eachEventNodeNum = 0;
+		const unsigned nodeMax = networkOne.getCapacity();
+		std::vector<unsigned> degreeVec = std::vector<unsigned>(nodeMax + 1);
+		
+		unsigned eachEventNodeNum = 0;			// 事件中节点个数
 
 		std::cout << "calculate node degree begin.." << std::endl;	///////////
 		if (calculateEachNodeDegree(degreeVec) == false) {
@@ -39,8 +41,14 @@ bool EventAnalysis::degreeCentrality()
 		}
 
 		std::cout << "write file begin.." << std::endl;	////////////
+		
 		if (writeFileDegreeCentra(tarFilePref, i, degreeVec, eachEventNodeNum) == false) {
 			std::cerr << "write file degree centrality error." << std::endl;
+			return false;
+		}
+
+		if (writeFileDegreeDis(tarFilePref, i, degreeVec) == false) {
+			std::cerr << "write file degree distribution error." << std::endl;
 			return false;
 		}
 
@@ -102,6 +110,9 @@ bool EventAnalysis::calculateEventNodeNumber(const std::vector<unsigned> &degree
 	return true;
 }
 
+/*
+ *	度中心性结果
+ */
 bool EventAnalysis::writeFileDegreeCentra(const std::string &tarFilePref, const unsigned eventId,
 					const std::vector<unsigned> &degreeVec, const unsigned eventNodeNum)
 {
@@ -126,6 +137,34 @@ bool EventAnalysis::writeFileDegreeCentra(const std::string &tarFilePref, const 
 		
 		outputFile << i << "\t" << dc << "\n";
 	}
+
+	outputFile.close();
+
+	return true;
+}
+/*
+ *	度分布结果
+ */
+bool EventAnalysis::writeFileDegreeDis(const std::string &tarFilePref, const unsigned eventId, const std::vector<unsigned> &degreeVec)
+{
+	const unsigned nodeMax = networkOne.getCapacity();
+
+	std::stringstream ss;
+	ss << "degreeDist_";
+	ss << eventId;
+
+	std::string fileName;
+	ss >> fileName;
+
+	std::fstream outputFile(tarFilePref + fileName, std::ios_base::out);
+	if (!outputFile.is_open()) {
+		std::cerr << "open output file error. at: " << tarFilePref + fileName << std::endl;
+		return false;
+	}
+
+	for (unsigned i = 1; i <= nodeMax; ++i)
+		if (degreeVec.at(i) > 0)
+			outputFile << i << "\t" << degreeVec.at(i) << "\n";
 
 	outputFile.close();
 

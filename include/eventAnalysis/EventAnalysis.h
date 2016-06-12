@@ -71,7 +71,8 @@ public:
 	
 	bool calculateEachNodeDegree(std::vector<unsigned> &);
 	bool calculateEventNodeNumber(const std::vector<unsigned> &, unsigned &);			//获取时间用户个数
-	bool writeFileDegreeCentra(const std::string &, const unsigned, const std::vector<unsigned> &, const unsigned);
+	bool writeFileDegreeCentra(const std::string &, const unsigned, const std::vector<unsigned> &, const unsigned);	//度中心性
+	bool writeFileDegreeDis(const std::string &, const unsigned, const std::vector<unsigned> &);
 
 	// 接近中心性
 	bool closenessCentrality();
