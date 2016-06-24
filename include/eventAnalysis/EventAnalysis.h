@@ -74,6 +74,12 @@ public:
 	bool writeFileDegreeCentra(const std::string &, const unsigned, const std::vector<unsigned> &, const unsigned);	//度中心性
 	bool writeFileDegreeDis(const std::string &, const unsigned, const std::vector<unsigned> &);
 
+	// user 网络的度分布
+	bool userDegreeDistribution();
+
+	bool userCalculateEachNodeDegree(std::vector<unsigned> &);
+	bool userDegreeDisWriteFileDegreeCentra(const std::string &, const std::vector<unsigned> &);
+
 	// 接近中心性
 	bool closenessCentrality();
 
@@ -81,7 +87,6 @@ public:
 	bool calEachEventClossCentra(const unsigned, std::vector<std::pair<unsigned, double>> &);
 	bool calNodeSumDis(const unsigned, unsigned &);
 	bool writeFileClosCentra(const std::string &, const unsigned, const std::vector<std::pair<unsigned, double>> &);
-
 
 private:
 	EventAnalysis(const EventAnalysis &) = delete;

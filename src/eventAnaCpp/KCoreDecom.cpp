@@ -272,6 +272,8 @@ bool EventAnalysis::kCoreUserDecomposition()
 	const std::string srcFilePrefix = BasicData::SrcEventWithTimePrefix;
 
 	const std::string fileName = "user_k_core_src_network";
+	//const std::string fileName = "aggregated_event_network";
+
 
 	//	按照不同的step目的
 	//	step two:	userFileVec

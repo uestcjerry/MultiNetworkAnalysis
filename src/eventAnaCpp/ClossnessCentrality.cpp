@@ -14,7 +14,7 @@ bool EventAnalysis::closenessCentrality()
 	//const std::vector<std::string> testVec = { "testOne.txt" };
 	//for (unsigned i = 0; i < testVec.size(); ++i) {
 
-	for (unsigned i = 19; i < BasicData::VecSrcEventFiles.size(); ++i) {
+	for (unsigned i = 20; i < BasicData::VecSrcEventFiles.size(); ++i) {
 		std::cout << "handling file: " << BasicData::VecSrcEventFiles.at(i) << std::endl;		/////////////
 
 		if (buildNetworkOne(srcFilePref + BasicData::VecSrcEventFiles.at(i)) == false) {

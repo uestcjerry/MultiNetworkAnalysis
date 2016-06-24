@@ -6,7 +6,7 @@
 #include <sstream>
 
 /*
- *	度中心性排序
+ *	计算转发事件的 度中心性排序
  */
 
 bool EventAnalysis::degreeCentrality()
@@ -51,7 +51,6 @@ bool EventAnalysis::degreeCentrality()
 			std::cerr << "write file degree distribution error." << std::endl;
 			return false;
 		}
-
 		clearNetworkOne();
 	}
 

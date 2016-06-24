@@ -80,6 +80,10 @@ bool KendallAnalysis::judgeTwoSrcFile(const std::string &srcFileOne, const std::
  *
  *	一致性：
  *	(x_i > x_j && y_i > y_j) || (x_i < x_j && y_i < y_j)
+ *	不一致性：
+ *	(x_i < x_j && y_i > y_j) || (x_i > x_j && y_i < y_j)
+ *
+ *	其他情况既不是一致也不是不一致
  */
 bool KendallAnalysis::kendallExpressionOne(const std::string &srcFileOne, const std::string &srcFileTwo
 	, const std::string &tarFileName)
@@ -131,8 +135,12 @@ bool KendallAnalysis::kendallExpressionOne(const std::string &srcFileOne, const 
 				commonPairNum++;
 			else if (fileOneVec.at(i) < fileOneVec.at(j) && fileTwoVec.at(i) < fileTwoVec.at(j))
 				commonPairNum++;
-			else
+			else if (fileOneVec.at(i) > fileOneVec.at(j) && fileTwoVec.at(i) < fileTwoVec.at(j))
 				unCommonPariNum++;
+			else if (fileOneVec.at(i) < fileOneVec.at(j) && fileTwoVec.at(i) > fileTwoVec.at(j))
+				unCommonPariNum++;
+			else
+				;
 		}
 
 	double firstPart = static_cast<double>(commonPairNum - unCommonPariNum);
@@ -140,25 +148,14 @@ bool KendallAnalysis::kendallExpressionOne(const std::string &srcFileOne, const 
 
 	double kendallRes = (2 * firstPart) / secondPart;
 
-	/*
-	std::cout << "commmon pair = " << commonPairNum << std::endl;
-	std::cout << "un common pair = " << unCommonPariNum << std::endl;
-	std::cout << "totalNode = " << totalNodeNum << ", secondpart = " << secondPart << std::endl;
-	std::cout << "kendall = " << kendallRes << std::endl;
-	getchar();
-	*/
+	//
 
-	//double kendallRes = 2 * (static_cast<double>(commonPairNum - unCommonPariNum) / static_cast<double>(totalNodeNum * (totalNodeNum - 1)));
-
-	//////////////////////////////////////////////////////////////
 	std::fstream outputFile(tarFile, std::ios_base::out);
 	if (!outputFile.is_open()) {
 		std::cerr << "open output file error: " << tarFile << std::endl;
 		return false;
 	}
 
-	//outputFile << "% src file: " << srcFileOne << "\n";
-	//outputFile << "% src file: " << srcFileTwo << "\n";
 	outputFile << kendallRes << "\n";
 
 	outputFile.close();
@@ -223,8 +220,12 @@ bool KendallAnalysis::kendallExpressionTwo(const std::string &srcFileOne, const 
 				commonPairNum++;
 			else if (fileOneVec.at(i) < fileOneVec.at(j) && fileTwoVec.at(i) < fileTwoVec.at(j))
 				commonPairNum++;
-			else
+			else if (fileOneVec.at(i) > fileOneVec.at(j) && fileTwoVec.at(i) < fileTwoVec.at(j))
 				unCommonPariNum++;
+			else if (fileOneVec.at(i) < fileOneVec.at(j) && fileTwoVec.at(i) > fileTwoVec.at(j))
+				unCommonPariNum++;
+			else
+				;
 		}
 
 	//////////////////////////////////////////////////

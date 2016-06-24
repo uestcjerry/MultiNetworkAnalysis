@@ -46,6 +46,14 @@ namespace BasicData {
 		"House prices"
 	};
 
+	const std::vector<std::string> VecUserFiles = {
+		"user_k_core_src_network"
+	};
+	const std::vector<std::string> VecEventAggreFiles = {
+		"aggregated_event_network"
+	};
+
+
 	const std::vector<std::string> VecSrcUserFiles = {
 		"1000",
 		"1001",

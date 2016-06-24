@@ -22,9 +22,12 @@ bool EventAnalysis::anaConnectedComponent()
 
 	std::string srcFilePrefix = BasicData::SrcEventWithTimePrefix;
 
-	for (unsigned i = 0; i < BasicData::VecSrcEventFiles.size(); ++i) {
-		std::cout << "\n first for: " << BasicData::VecSrcEventFiles.at(i) << std::endl;	/////////////
 
+	// BasicData::VecUserFiles.size()    BasicData::VecSrcEventFiles.size()
+	for (unsigned i = 0; i < BasicData::VecSrcEventFiles.size(); ++i) {
+		//std::cout << "\n first for: " << BasicData::VecSrcEventFiles.at(i) << std::endl;	/////////////
+
+		// BasicData::VecSrcEventFiles.at(i)  BasicData::VecUserFiles.at(i)
 		if (buildNetworkOne(srcFilePrefix + BasicData::VecSrcEventFiles.at(i)) == false) {
 			std::cerr << "build network one error." << std::endl, getchar();
 			clearNetworkOne();

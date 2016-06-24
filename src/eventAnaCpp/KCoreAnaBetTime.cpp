@@ -34,7 +34,10 @@ bool EventAnalysis::kcoreAnaBetTime()
 		totalDisOfDay = distanceDayBetTime(maxTime, minTime);
 		std::cout << "event: " << i << ", totalDisOfDay = " << totalDisOfDay << std::endl;
 
-		for (double div = 0.2; div <= 1.0; div += 0.2) {
+		// 0.2 ~ 1.0, 0.2 += 0.2 划分五段
+		// 做对比，划分二十段 0.05 ~ 1.00			write file 修改一下即可
+		for (double div = 0.05; div < 1.05; div += 0.05) {
+
 			std::cout << "current div = " << div << ", eventId = " << i << std::endl;		///////////////
 			
 			long long divDisOfDay = static_cast<long long>(totalDisOfDay * div);
@@ -112,7 +115,10 @@ bool EventAnalysis::kcoreAnaWriteFile(const std::string &tarFilePref, const std:
 	ss << "event";
 	ss << eventId;
 	ss << "_";
-	ss << div * 10;
+
+	//ss << div * 10;		// 划分为五段 0.2， 这里 *10
+	ss << div * 100;		// 划分为二十段  0.05，这里 * 100
+
 	std::string fileName;
 	ss >> fileName;
 
@@ -124,7 +130,7 @@ bool EventAnalysis::kcoreAnaWriteFile(const std::string &tarFilePref, const std:
 		return false;
 	}
 	
-	outpufFile << "% k-core decomposition <ks, nodeId> event:" << eventId << ", div = " << div << std::endl;
+	//outpufFile << "% k-core decomposition <ks, nodeId> event:" << eventId << ", div = " << div << std::endl;
 
 	for (const auto &elem : resultVec)
 		outpufFile << elem.first << "\t" << elem.second << "\n";

@@ -374,12 +374,17 @@ bool CrossLink::getDegreeAsUndi(const _NodeTag_t u, unsigned &res)
 	}
 
 	unsigned degreeTotal = 0;
+	/*
 	for (const auto &elem : ajaVec)
 		if (elem != u)
 			degreeTotal++;
 	for (const auto &elem : ajaReVec)
 		if (elem != u)
 			degreeTotal++;
+		*/
+
+	degreeTotal += ajaVec.size();
+	degreeTotal += ajaReVec.size();
 
 	//res = crossLinkObj.at(u).first.size() + crossLinkObj.at(u).second.size();
 	res = degreeTotal;

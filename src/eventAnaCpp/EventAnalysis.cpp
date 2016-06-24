@@ -74,7 +74,6 @@ bool eventAnalysisRevokeThis()
 	// init once , enough
 	//if (obj.initUserManageObj(BasicData::SrcUserRehashedDelRepPrefix) == false)
 	//	return false;
-
 	
 	//if (obj.anaDegreeRelaBetLevl() == false)
 	//	return false;
@@ -99,8 +98,13 @@ bool eventAnalysisRevokeThis()
 	//if (obj.degreeCentrality() == false)			//re run 
 	//	return false;
 
-	if (obj.closenessCentrality() == false)
-		return false;
+	//	还差最后一个 20 event
+	//if (obj.closenessCentrality() == false)
+	//	return false;
+
+	//if (obj.userDegreeDistribution() == false)	// 用户user 关系网文件，做度分布分析
+	//	return false;
+
 
 	std::cout << "Event analysis finish.." << std::endl;
 	std::cout << "Press any key to continue.." << std::endl;
