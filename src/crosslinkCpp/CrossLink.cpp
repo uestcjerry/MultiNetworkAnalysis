@@ -3,11 +3,6 @@
 #include <iostream>
 #include <fstream>
 
-
-CrossLink::CrossLink() { capacity = 0; }
-CrossLink::~CrossLink() { capacity = 0; }
-
-
 bool CrossLink::testCrossLink()
 {
 	std::string sourceFile = BasicData::SrcEventWithTimePrefix + "test.txt";
@@ -60,9 +55,10 @@ bool CrossLink::testCrossLink()
 	return true;
 }
 
-unsigned CrossLink::getCapacity() { return capacity; }
-
-const unsigned CrossLink::getCapacity() const { return capacity; }
+unsigned CrossLink::getCapacity() const 
+{ 
+	return capacity; 
+}
 
 void CrossLink::deconsCrossLinkObj()
 {
@@ -77,17 +73,18 @@ bool CrossLink::consCrossLinkObj(const std::string &file)
 		return false;
 	}
 	capacity = max;
-	crossLinkObj = std::vector<std::pair<CrossLink_t, CrossLink_t>>(max + 1);			// takes some time..
+	crossLinkObj = std::vector<std::pair<CrossLink_T, CrossLink_T>>(max + 1);			// takes some time..
 	
-	std::cout << "\n" << "cons crosslink obj finish: " << file << std::endl;
+	//std::cout << "\n" << "cons crosslink obj finish: " << file << std::endl;
 	return true;
 }
+
 /*
  *	构造网络
  */
 bool CrossLink::readFileConsCrosLink(const std::string &file)
 {
-	std::cout << "\n read file cons cross-link: " << file << std::endl;			////
+	std::cout << "\n read file cons cross-link: " << file << std::endl;		
 	
 	if (consCrossLinkObj(file) == false)
 		return false;
@@ -107,7 +104,9 @@ bool CrossLink::readFileConsCrosLink(const std::string &file)
 			std::cout << "read file cons line = " << line << std::endl;
 		
 		Time tempTimeObj = Time(year, month, day, hour, minute, second);
-		BasicEdge tempEdgeObj = BasicEdge(idOne, idTwo, 1, tempTimeObj);
+
+		// 这里正反两次插入是当做无向图处理的。
+		BasicEdge tempEdgeObj = BasicEdge(idOne, idTwo, 1, tempTimeObj);	
 		BasicEdge tempEdgeRevObj = BasicEdge(idTwo, idOne, 1, tempTimeObj);
 
 		if (false == insertHoriCroLink(tempEdgeObj)) {
@@ -120,7 +119,6 @@ bool CrossLink::readFileConsCrosLink(const std::string &file)
 		}
 	}
 	inputFile.close();
-	//std::cout << "\n read file cons cross-link finish.." << std::endl;			////
 	return true;
 }
 /*
@@ -175,7 +173,7 @@ bool CrossLink::readFileConsCrosLinkBeforTime(const std::string &file, const Tim
 	}
 	inputFile.close();
 	
-	std::cout << "insert time = " << insertTime << ", lengthOfDay = " << lengthOfDay << std::endl;
+	//std::cout << "insert time = " << insertTime << ", lengthOfDay = " << lengthOfDay << std::endl;
 	//std::cout << "press any key to continue.." << std::endl;
 	//getchar();
 
@@ -198,7 +196,7 @@ bool CrossLink::findMaxNodeTag(const std::string &file, unsigned &max)
 		max = tempTwo > max ? tempTwo : max;
 	}
 	inputFile.close();
-	std::cout << "find max node finish.." << std::endl;
+	//std::cout << "find max node finish.." << std::endl;
 	return true;
 }
 bool CrossLink::findMaxNodeTagTime(const std::string &file, unsigned &max)
@@ -273,7 +271,7 @@ bool CrossLink::searchVertCroLink(const BasicEdge &elem)
 
 bool CrossLink::getAjaOfNodeFromHoriCroLink(const _NodeTag_t i, std::vector<_NodeTag_t> &vec)
 {
-	vec.clear();
+	//vec.clear();
 	if (i > capacity || i < 0)
 		return false;
 	auto multiIte = crossLinkObj.at(i).first;
@@ -286,7 +284,7 @@ bool CrossLink::getAjaOfNodeFromHoriCroLink(const _NodeTag_t i, std::vector<_Nod
 }
 bool CrossLink::getAjaOfNodeFromVertCroLink(const _NodeTag_t j, std::vector<_NodeTag_t> &vec)
 {
-	vec.clear();
+	//vec.clear();
 	if (j > capacity || j < 0)
 		return false;
 	auto multiIte = crossLinkObj.at(j).second;
@@ -296,6 +294,22 @@ bool CrossLink::getAjaOfNodeFromVertCroLink(const _NodeTag_t j, std::vector<_Nod
 		if (iter->getFrom() != j)
 			vec.push_back(iter->getFrom());
 	return true;
+}
+
+bool CrossLink::getCommonAjacencyOfXandY(const _NodeTag_t x, const _NodeTag_t y, std::vector<_NodeTag_t> &vec)
+{
+	if (x > capacity || y > capacity)
+		return false;
+	if (x == y)
+		return true;
+	
+	// 我可以修改底层结构，提高速度了。
+	
+	// 这里还没有写完整 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+	return true;
+	//return true;
 }
 
 bool CrossLink::getAjaFromHoriCroLink(const BasicEdge &u, std::vector<_NodeTag_t> &vec)
@@ -326,7 +340,7 @@ bool CrossLink::getAjaFromVertCroLink(const BasicEdge &u, std::vector<_NodeTag_t
 			vec.push_back(iter->getFrom());
 	return true;
 }
-bool CrossLink::getAjaSizeFromHori(const _NodeTag_t u, unsigned &res)
+bool CrossLink::getAjaSizeFromHori(const _NodeTag_t u, _NodeTag_t &res)
 {
 	if (u > capacity || u <= 0)
 		return false;
@@ -340,7 +354,7 @@ bool CrossLink::getAjaSizeFromHori(const _NodeTag_t u, unsigned &res)
 	res = ajaVec.size(); 
 	return true;
 }
-bool CrossLink::getAjaSizeFromVert(const _NodeTag_t u, unsigned &res)
+bool CrossLink::getAjaSizeFromVert(const _NodeTag_t u, _NodeTag_t &res)
 {
 	if (u > capacity || u <= 0)
 		return false;
@@ -354,9 +368,9 @@ bool CrossLink::getAjaSizeFromVert(const _NodeTag_t u, unsigned &res)
 	return true;
 }
 /*
- *	处理类似 310 310 这样的转发
+ *	没有处理类似 310 310 这样的转发，注意
  */
-bool CrossLink::getDegreeAsUndi(const _NodeTag_t u, unsigned &res)
+bool CrossLink::getDegreeAsUndi(const _NodeTag_t u, _NodeTag_t &res)
 {
 	if (u > capacity || u <= 0) 
 		return false;
@@ -373,21 +387,7 @@ bool CrossLink::getDegreeAsUndi(const _NodeTag_t u, unsigned &res)
 		return false;
 	}
 
-	unsigned degreeTotal = 0;
-	/*
-	for (const auto &elem : ajaVec)
-		if (elem != u)
-			degreeTotal++;
-	for (const auto &elem : ajaReVec)
-		if (elem != u)
-			degreeTotal++;
-		*/
-
-	degreeTotal += ajaVec.size();
-	degreeTotal += ajaReVec.size();
-
-	//res = crossLinkObj.at(u).first.size() + crossLinkObj.at(u).second.size();
-	res = degreeTotal;
+	res += ajaVec.size() + ajaReVec.size();
 	return true;
 }
 
@@ -441,7 +441,7 @@ bool CrossLink::deleteUndiEdge(const _NodeTag_t from, const _NodeTag_t to)
 
 void CrossLink::showCroLink()
 {
-	std::cout << "============================== Aja table ===============================" << std::endl;
+	std::cout << "============================== Aja-table =================================" << std::endl;
 	for (unsigned i = 1; i <= capacity; ++i) {
 		auto tempPair = crossLinkObj.at(i);
 		if (tempPair.first.size() == 0)
@@ -458,7 +458,7 @@ void CrossLink::showCroLink()
 	}
 	//std::cout << "Press any key.." << std::endl;
 	//getchar();
-	std::cout << "============================= Rev Aja table =============================" << std::endl;
+	std::cout << "=============================== Re-Aja table ===============================" << std::endl;
 	for (unsigned j = 1; j <= capacity; ++j) {
 		auto tempPair = crossLinkObj.at(j);
 		if (tempPair.second.size() == 0)

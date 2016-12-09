@@ -23,6 +23,8 @@ namespace BasicData {
 	const std::string SrcEventFilePrefix = "e:\\data_of_weibo\\data_washed\\event_max\\";
 
 	const std::vector<std::string> VecSrcEventFiles = {
+		"Nature_Ap_Network_wash",				// 这个是nature的AP聚类数据集，结果是划分为三个社团3 7 20 
+
 		"Foxconn worker falls to death",
 		"incident of self-burning at Yancheng, Jangsu",
 		"individual income tax threshold rise up to 3500",

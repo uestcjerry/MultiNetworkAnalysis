@@ -104,8 +104,6 @@ bool EventAnalysis::userDegreeDisWriteFileDegreeCentra(const std::string &tarFil
 		averageDegree += static_cast<double>(degreeVec.at(i)) / static_cast<double>(notNullNode);
 	}
 
-	
-
 	//std::cout << "average degree = " << averageDegree <<  std::endl;
 	//std::cout << "notNullNode = " << notNullNode << std::endl;
 	//getchar();

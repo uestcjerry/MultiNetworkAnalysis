@@ -112,6 +112,7 @@ std::ostream& operator<<(std::ostream &os, const BasicEdge &u)
 	os << u.from << " " << u.to; 
 	return os;
 }
+
 bool compareTransTimeLess(const BasicEdge &l , const BasicEdge &r)
 {
 	return l.transTime < r.transTime;
@@ -123,6 +124,12 @@ bool compareTransTimeMore(const BasicEdge &l, const BasicEdge &r)
 bool compareTransTimeEqua(const BasicEdge &l, const BasicEdge &r)
 {
 	return l.transTime == r.transTime;
+}
+
+bool BasicEdge::operator==(const BasicEdge &e)
+{
+	if (this->from == e.from && this->to == e.to) return true;
+	else	return false;
 }
 
 BasicEdge::BasicEdge() {}

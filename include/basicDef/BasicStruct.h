@@ -48,6 +48,8 @@ public:
 	friend bool compareTransTimeMore(const BasicEdge &, const BasicEdge &);
 	friend bool compareTransTimeEqua(const BasicEdge &, const BasicEdge &);
 
+	bool operator==(const BasicEdge &);
+
 	BasicEdge();
 	BasicEdge(const _NodeTag_t, const _NodeTag_t, const _NodeWei_t, Time &);
 	BasicEdge(const BasicEdge &);

@@ -16,7 +16,7 @@ public:
 
 	bool buildNetworkOne(const std::string &);		//参数是文件全名
 	bool buildNetworkTwo(const std::string &);
-	bool buildNetworkOneWithTime(const std::string &, const Time &, const long long);
+	bool buildNetworkOneWithTime(const std::string &, const Time &, const long long);	// 构造long时间之前的网络
 
 	void clearNetworkOne();
 	void clearNetworkTwo();

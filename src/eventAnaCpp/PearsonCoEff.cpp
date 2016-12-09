@@ -7,6 +7,7 @@
 
 // ================================== Pearson co-efficiency ====================================== //
 /*
+*	revoke this function.
 *	output format:
 *	result eventI eventJ
 */
@@ -124,6 +125,7 @@ bool EventAnalysis::anaDegreeRelaBetLevl()
 	getchar();
 	return true;
 }
+
 bool EventAnalysis::getCommonNode(std::vector<unsigned> &commonVec)
 {
 	unsigned sizeOfA = networkOne.getCapacity(), sizeOfB = networkTwo.getCapacity();
@@ -142,6 +144,7 @@ bool EventAnalysis::getCommonNode(std::vector<unsigned> &commonVec)
 	}
 	return true;
 }
+
 bool EventAnalysis::getDegreeOfDifLevlFromCommonVec(std::vector<unsigned> &commonVec, std::set<unsigned> &commonSet,
 	std::vector<std::pair<unsigned, unsigned>> &a, std::vector<std::pair<unsigned, unsigned>> &b)
 {

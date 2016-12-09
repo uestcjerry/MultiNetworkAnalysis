@@ -75,13 +75,13 @@ bool eventAnalysisRevokeThis()
 	//if (obj.initUserManageObj(BasicData::SrcUserRehashedDelRepPrefix) == false)
 	//	return false;
 	
-	//if (obj.anaDegreeRelaBetLevl() == false)
+	//if (obj.anaDegreeRelaBetLevl() == false)	// pearson co-efficiency
 	//	return false;
 
 	//if (obj.anaOverlapOfDifLevl() == false)			// re run
 	//	return false;
 
-	//if (obj.anaConnectedComponent() == false)		//re run
+	//if (obj.anaConnectedComponent() == false)		//re run  using BFS here.
 	//	return false;
 
 	//if (obj.anaTransProportion() == false)
@@ -105,9 +105,7 @@ bool eventAnalysisRevokeThis()
 	//if (obj.userDegreeDistribution() == false)	// 用户user 关系网文件，做度分布分析
 	//	return false;
 
-
-	std::cout << "Event analysis finish.." << std::endl;
-	std::cout << "Press any key to continue.." << std::endl;
+	std::cout << "Event analysis finish, Press any key to continue" << std::endl;
 	getchar();
 	return true;
 }

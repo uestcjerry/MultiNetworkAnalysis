@@ -22,18 +22,16 @@ bool EventAnalysis::anaConnectedComponent()
 
 	std::string srcFilePrefix = BasicData::SrcEventWithTimePrefix;
 
-
 	// BasicData::VecUserFiles.size()    BasicData::VecSrcEventFiles.size()
 	for (unsigned i = 0; i < BasicData::VecSrcEventFiles.size(); ++i) {
-		//std::cout << "\n first for: " << BasicData::VecSrcEventFiles.at(i) << std::endl;	/////////////
 
-		// BasicData::VecSrcEventFiles.at(i)  BasicData::VecUserFiles.at(i)
 		if (buildNetworkOne(srcFilePrefix + BasicData::VecSrcEventFiles.at(i)) == false) {
 			std::cerr << "build network one error." << std::endl, getchar();
 			clearNetworkOne();
 			return false;
 		}
 
+		// BFS search
 		unsigned arrayLength = networkOne.getCapacity();
 
 		std::unique_ptr<BfsNode[]> bfsArray(new BfsNode[arrayLength + 1]);		// 1 ~ capacity
@@ -86,19 +84,21 @@ bool EventAnalysis::procBfsArray(std::unique_ptr<BfsNode[]> &bfsArray)
 	unsigned capa = networkOne.getCapacity();
 	for (unsigned i = 1; i <= capa; ++i) {
 		unsigned horiSize = 0, vertSize = 0;
-		if (networkOne.getAjaSizeFromHori(i, horiSize) == false) {
+		if (networkOne.getAjaSizeFromHori(i, horiSize) == false) {		// i -> ?
 			std::cerr << "get aja size from hori :" << i << " error." << std::endl;
 			return false;
 		}
 		if (horiSize != 0) {
-			bfsArray[i].useNode(); continue;
+			bfsArray[i].useNode(); 
+			continue;
 		}
-		if (networkOne.getAjaSizeFromVert(i, vertSize) == false) {
+		if (networkOne.getAjaSizeFromVert(i, vertSize) == false) {		// ? -> i
 			std::cerr << "get aja size from vert :" << i << " error." << std::endl;
 			return false;
 		}
 		if (vertSize != 0) {
-			bfsArray[i].useNode(); continue;
+			bfsArray[i].useNode(); 
+			continue;
 		}
 	}
 	unsigned branch = 1;
